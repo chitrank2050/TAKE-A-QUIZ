@@ -33,7 +33,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> fetchQuestions() async {
     var data = await http.get('https://opentdb.com/api.php?amount=20');
     results = QuizModel.fromJson(jsonDecode(data.body)).results;
-    print(results);
   }
 
   @override

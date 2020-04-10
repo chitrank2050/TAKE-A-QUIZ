@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:quiz_app/models/quiz.dart';
 
+import 'answers.dart';
+
 class Quiz extends StatelessWidget {
   final List<Results> questions;
 
@@ -52,7 +54,12 @@ class Quiz extends StatelessWidget {
               backgroundColor: Colors.grey[100],
               child: Text(questions[index].type.substring(0, 1).toUpperCase()),
             ),
-            children: <Widget>[],
+            children: <Widget>[
+              ...questions[index].allAnswers.map((e) => Answers(
+                    e,
+                    questions[index].correctAnswer,
+                  ))
+            ],
           ),
         ),
       ),
