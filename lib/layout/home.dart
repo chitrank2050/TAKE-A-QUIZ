@@ -12,11 +12,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<Results> results;
+  Future<List<Results>> _resultFuture;
 
-  Future<void> fetchQuestions() async {
+  @override
+  void initState() {
+    super.initState();
+    _resultFuture = fetchQuestions();
+  }
+
+  Future<Null> refreshQuestions() async {
+    setState(() {
+      _resultFuture = fetchQuestions();
+    });
+  }
+
+  Future<List<Results>> fetchQuestions() async {
     var data = await http.get('https://opentdb.com/api.php?amount=20');
-    results = QuizModel.fromJson(jsonDecode(data.body)).results;
+    return QuizModel.fromJson(jsonDecode(data.body)).results;
   }
 
   @override
@@ -28,8 +40,8 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: RefreshIndicator(
         child: FutureBuilder(
-          future: fetchQuestions(),
-          builder: (BuildContext ctx, AsyncSnapshot snap) {
+          future: _resultFuture,
+          builder: (BuildContext ctx, AsyncSnapshot<List<Results>> snap) {
             switch (snap.connectionState) {
               case ConnectionState.none:
                 return Text('Press button to start');
@@ -40,12 +52,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               case ConnectionState.done:
                 if (snap.hasError) return Error(snap);
-                return Quiz(results);
+                return Quiz(snap.data ?? <Results>[]);
             }
             return null;
           },
         ),
-        onRefresh: fetchQuestions,
+        onRefresh: refreshQuestions,
       ),
     );
   }
