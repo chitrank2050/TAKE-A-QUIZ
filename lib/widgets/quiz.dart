@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/models/quiz.dart';
+import 'package:html_unescape/html_unescape.dart';
 
-import 'answers.dart';
+import 'package:quiz_app/models/quiz.dart';
+import 'package:quiz_app/widgets/answers.dart';
 
 class Quiz extends StatelessWidget {
   final List<Results> questions;
@@ -22,7 +23,7 @@ class Quiz extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  questions[index].question,
+                  HtmlUnescape().convert(questions[index].question),
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,

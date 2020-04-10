@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape.dart';
 
 class Answers extends StatefulWidget {
   final String correct;
@@ -26,7 +27,7 @@ class _AnswersState extends State<Answers> {
     return ListTile(
       onTap: checkAnswer,
       title: Text(
-        widget.title,
+        HtmlUnescape().convert(widget.title),
         textAlign: TextAlign.center,
         style: TextStyle(color: c),
       ),
